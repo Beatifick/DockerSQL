@@ -2,13 +2,12 @@ package ru.netology.test;
 
 import org.junit.jupiter.api.Test;
 import ru.netology.data.DataHelper;
+import ru.netology.data.SQLHelper;
+import ru.netology.page.DashboardPage;
 import ru.netology.page.LoginPage;
 import ru.netology.page.VerificationPage;
 
-import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.open;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static com.codeborne.selenide.Selenide.$;
 
 public class LoginTest {
 
@@ -18,23 +17,28 @@ public class LoginTest {
         var loginPage = open("http://localhost:9999", LoginPage.class);
         loginPage.validLogin(authInfo);
 
-        var verificationCode = DataHelper.getVerificationCodeFromDB();
+        var verificationCode = SQLHelper.getVerificationCode(); // используем SQLHelper
         var verificationPage = new VerificationPage();
         verificationPage.validVerify(verificationCode);
 
-        // проверка успешного входа
-        $("[data-test-id='dashboard']").shouldBe(visible);
+        // проверка успешного входа через доменный метод страницы
+        var dashboardPage = new DashboardPage();
+        dashboardPage.shouldBeVisible();
     }
 
     @Test
-    void shouldBlockUserAfterThreeWrongPasswords() {
-        var loginPage = new LoginPage();
+    void shouldBlockUserAfterThreeWrongPasswords() throws InterruptedException {
+        var loginPage = open("http://localhost:9999", LoginPage.class);
+
+        // Вводим данные один раз
+        loginPage.invalidLogin(DataHelper.getInvalidPasswordUser());
+
+        // Три раза нажимаем кнопку с паузой 1 секунда
         for (int i = 0; i < 3; i++) {
-            open("http://localhost:9999"); // открываем страницу заново
-            loginPage.invalidLogin(DataHelper.getInvalidPasswordUser());
+            loginPage.clickLoginButton(); // создадим отдельный метод в LoginPage
         }
-        // после третьей попытки проверяем блокировку
-        var errorMessage = $("[data-test-id='error-notification']").getText();
-        assertEquals("Ошибка! Пользователь заблокирован", errorMessage);
+
+        // проверка блокировки через доменный метод
+        loginPage.shouldBeBlocked();
     }
 }

@@ -12,9 +12,9 @@ repositories {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
-    testImplementation 'com.codeborne:selenide:6.16.1'
     testImplementation 'mysql:mysql-connector-java:8.0.33'
     testImplementation 'com.codeborne:selenide:6.19.1'
+    testImplementation 'commons-dbutils:commons-dbutils:1.7'
 
     compileOnly 'org.projectlombok:lombok:1.18.28'
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
@@ -24,4 +24,5 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    systemProperty 'chromeoptions.prefs', System.getProperty('chromeoptions.prefs', "profile.password_manager_leak_detection=false")
 }
