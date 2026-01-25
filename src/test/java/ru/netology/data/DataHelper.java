@@ -1,7 +1,6 @@
 package ru.netology.data;
 
 import lombok.Value;
-
 import java.sql.*;
 
 public class DataHelper {

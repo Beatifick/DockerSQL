@@ -1,10 +1,12 @@
 package ru.netology.test;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import ru.netology.data.DataHelper;
+import ru.netology.data.SQLHelper;
+import ru.netology.page.DashboardPage;
 import ru.netology.page.LoginPage;
 import ru.netology.page.VerificationPage;
-import ru.netology.page.DashboardPage;
 
 import static com.codeborne.selenide.Selenide.open;
 
@@ -37,5 +39,10 @@ public class LoginTest {
         }
 
         loginPage.shouldBeBlocked();
+    }
+
+    @AfterAll
+    static void cleanup() {
+        SQLHelper.cleanDatabase();
     }
 }

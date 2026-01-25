@@ -11,6 +11,10 @@ public class SQLHelper {
 
     private SQLHelper() {}
 
+    private static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(URL, USER, PASS);
+    }
+
     private static final String URL = "jdbc:mysql://localhost:3306/appdb";
     private static final String USER = "appuser";
     private static final String PASS = "apppass";
@@ -32,6 +36,19 @@ public class SQLHelper {
             new QueryRunner().update(conn, query);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void cleanDatabase() {
+        QueryRunner runner = new QueryRunner();
+        try (Connection conn = getConnection()) {
+            runner.update(conn, "DELETE FROM card_transactions");
+            runner.update(conn, "DELETE FROM auth_codes");
+            runner.update(conn, "DELETE FROM cards");
+            runner.update(conn, "DELETE FROM users");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Ошибка при очистке базы данных");
         }
     }
 }
