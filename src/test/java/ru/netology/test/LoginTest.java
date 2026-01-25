@@ -29,11 +29,10 @@ public class LoginTest {
     @Test
     void shouldBlockUserAfterThreeWrongPasswords() throws InterruptedException {
         var loginPage = open("http://localhost:9999", LoginPage.class);
-        loginPage.invalidLogin(DataHelper.getInvalidPasswordUser());
+        loginPage.validLogin(DataHelper.getInvalidPasswordUser());
 
         // три нажатия на кнопку с задержкой 1 сек
         for (int i = 0; i < 3; i++) {
-            Thread.sleep(1000);
             loginPage.clickLoginButton();
         }
 

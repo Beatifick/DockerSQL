@@ -21,10 +21,6 @@ public class LoginPage {
         loginButton.click();
     }
 
-    public void invalidLogin(DataHelper.AuthInfo authInfo) {
-        fillLoginForm(authInfo);
-        loginButton.click();
-    }
 
     // Для теста блокировки: просто нажать кнопку
     public void clickLoginButton() {
