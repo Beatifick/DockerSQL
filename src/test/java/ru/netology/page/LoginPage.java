@@ -3,40 +3,38 @@ package ru.netology.page;
 import com.codeborne.selenide.SelenideElement;
 import ru.netology.data.DataHelper;
 
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 
 public class LoginPage {
-
     private final SelenideElement loginField = $("[data-test-id='login'] input");
     private final SelenideElement passwordField = $("[data-test-id='password'] input");
     private final SelenideElement loginButton = $("[data-test-id='action-login']");
-    private final SelenideElement errorNotification = $("[data-test-id='error-notification']");
+
+    // Универсальный метод для ввода данных
+    private void fillLoginForm(DataHelper.AuthInfo authInfo) {
+        loginField.setValue(authInfo.getLogin());
+        passwordField.setValue(authInfo.getPassword());
+    }
 
     public void validLogin(DataHelper.AuthInfo authInfo) {
-        loginField.clear();
-        loginField.setValue(authInfo.getLogin());
-        passwordField.clear();
-        passwordField.setValue(authInfo.getPassword());
+        fillLoginForm(authInfo);
         loginButton.click();
     }
 
     public void invalidLogin(DataHelper.AuthInfo authInfo) {
-        loginField.clear();
-        loginField.setValue(authInfo.getLogin());
-        passwordField.clear();
-        passwordField.setValue(authInfo.getPassword());
+        fillLoginForm(authInfo);
         loginButton.click();
     }
 
-    // Доменный метод проверки блокировки
-    public void shouldBeBlocked() {
-        errorNotification.shouldBe(visible)
-                .shouldHave(text("Ошибка! Пользователь заблокирован"));
-    }
-
+    // Для теста блокировки: просто нажать кнопку
     public void clickLoginButton() {
         loginButton.click();
+    }
+
+    // Проверка заблокированного пользователя
+    public void shouldBeBlocked() {
+        $("[data-test-id='error-notification']")
+                .shouldBe(com.codeborne.selenide.Condition.visible)
+                .shouldHave(com.codeborne.selenide.Condition.text("Ошибка! Пользователь заблокирован"));
     }
 }

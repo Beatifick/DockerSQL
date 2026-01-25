@@ -1,13 +1,15 @@
 package ru.netology.page;
 
-import static com.codeborne.selenide.Condition.visible;
+import com.codeborne.selenide.SelenideElement;
+
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Condition.visible;
 
 public class DashboardPage {
-
-    private final static String DASHBOARD_SELECTOR = "[data-test-id='dashboard']";
+    private final SelenideElement dashboardHeader = $("[data-test-id='dashboard']");
 
     public void shouldBeVisible() {
-        $(DASHBOARD_SELECTOR).shouldBe(visible);
+        dashboardHeader.shouldBe(visible)
+                .shouldHave(com.codeborne.selenide.Condition.text("Личный кабинет"));
     }
 }
