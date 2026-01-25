@@ -1,7 +1,6 @@
 package ru.netology.data;
 
 import lombok.Value;
-import java.sql.*;
 
 public class DataHelper {
 
@@ -24,27 +23,5 @@ public class DataHelper {
 
     public static AuthInfo getInvalidPasswordUser() {
         return new AuthInfo("vasya", "wrongPass");
-    }
-
-    public static VerificationCode getVerificationCodeFromDB() {
-        String url = "jdbc:mysql://localhost:3306/appdb";
-        String user = "appuser";
-        String pass = "apppass";
-        String code = "";
-        String query = "SELECT code FROM auth_codes ac " +
-                "JOIN users u ON u.id = ac.user_id " +
-                "WHERE u.login='vasya' " +
-                "ORDER BY ac.created DESC LIMIT 1";
-
-        try (Connection conn = DriverManager.getConnection(url, user, pass);
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) {
-                code = rs.getString("code");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return new VerificationCode(code);
     }
 }

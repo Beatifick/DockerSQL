@@ -2,14 +2,16 @@ package ru.netology.page;
 
 import com.codeborne.selenide.SelenideElement;
 
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Condition.visible;
 
 public class DashboardPage {
-    private final SelenideElement dashboardHeader = $("[data-test-id='dashboard']");
+
+    private final SelenideElement heading = $("[data-test-id='code']");
 
     public void shouldBeVisible() {
-        dashboardHeader.shouldBe(visible)
-                .shouldHave(com.codeborne.selenide.Condition.text("Личный кабинет"));
+        heading.shouldBe(visible)
+                .shouldHave(text("Код из SMS или Push"));
     }
 }
