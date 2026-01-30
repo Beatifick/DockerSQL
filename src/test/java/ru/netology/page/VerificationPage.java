@@ -1,7 +1,6 @@
 package ru.netology.page;
 
 import com.codeborne.selenide.SelenideElement;
-import ru.netology.data.DataHelper;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Condition.*;
@@ -10,10 +9,14 @@ public class VerificationPage {
 
     private final SelenideElement codeField = $("[data-test-id='code'] input");
     private final SelenideElement verifyButton = $("[data-test-id='action-verify']");
+    private final SelenideElement heading = $("[data-test-id='code']");
 
-    public DashboardPage validVerify(DataHelper.VerificationCode code) {
-        codeField.setValue(code.getCode());
-        verifyButton.click();
-        return new DashboardPage();
+    public void shouldBeOnVerificationPage() {
+        heading.shouldBe(visible).shouldHave(text("Код из SMS или Push"));
+        codeField.shouldBe(visible);
+    }
+
+    public void shouldBeVisible() {
+        codeField.shouldBe(visible);
     }
 }

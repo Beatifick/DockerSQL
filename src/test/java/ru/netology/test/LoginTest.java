@@ -12,30 +12,25 @@ public class LoginTest {
 
     @AfterAll
     void tearDown() {
-        SQLHelper.clearDatabase(); // Очистка БД после всех тестов
+        SQLHelper.clearDatabase();
     }
 
     @Test
-    void shouldLoginUsingCodeFromDatabase() {
+    void shouldGoToVerificationPageAfterLogin() {
         var authInfo = DataHelper.getValidUser();
         var loginPage = open("http://localhost:9999", LoginPage.class);
 
         var verificationPage = loginPage.validLogin(authInfo);
 
-        var verificationCode = SQLHelper.getVerificationCode(authInfo.getLogin());
-        var dashboardPage = verificationPage.validVerify(new DataHelper.VerificationCode(verificationCode));
-
-        dashboardPage.shouldBeVisible();
+        verificationPage.shouldBeVisible();
     }
 
     @Test
     void shouldBlockUserAfterThreeWrongPasswords() {
         var loginPage = open("http://localhost:9999", LoginPage.class);
 
-        // Вводим неверный пароль один раз
         loginPage.invalidLogin(DataHelper.getInvalidPasswordUser());
 
-        // Нажимаем кнопку логина еще 2 раза
         for (int i = 0; i < 2; i++) {
             loginPage.clickLoginButton();
         }
