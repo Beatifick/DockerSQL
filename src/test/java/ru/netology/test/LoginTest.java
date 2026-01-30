@@ -33,6 +33,7 @@ public class LoginTest {
 
         for (int i = 0; i < 2; i++) {
             loginPage.clickLoginButton();
+            loginPage.shouldShowBlockedUserError();
         }
     }
 }
