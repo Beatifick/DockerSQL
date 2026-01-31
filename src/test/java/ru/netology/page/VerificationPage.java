@@ -14,4 +14,8 @@ public class VerificationPage {
         codeField.setValue(code.getCode());
         verifyButton.click();
     }
+
+    public void shouldBeVisible() {
+        codeField.shouldBe(com.codeborne.selenide.Condition.visible);
+    }
 }

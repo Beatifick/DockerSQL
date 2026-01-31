@@ -2,32 +2,37 @@ package ru.netology.test;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import ru.netology.data.DataHelper;
 import ru.netology.data.SQLHelper;
 import ru.netology.page.LoginPage;
 import ru.netology.page.VerificationPage;
+import ru.netology.page.DashboardPage;
 
 import static com.codeborne.selenide.Selenide.open;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class LoginTest {
 
     @AfterAll
-    void tearDown() {
+    public static void tearDown() {
         SQLHelper.clearDatabase();
     }
 
     @Test
     void shouldLoginWithVerificationCode() {
-        DataHelper.AuthInfo authInfo = DataHelper.getValidUser();
+        var authInfo = DataHelper.getValidUser();
         LoginPage loginPage = open("http://localhost:9999", LoginPage.class);
 
         VerificationPage verificationPage = loginPage.validLogin(authInfo);
-        String codeFromDB = SQLHelper.getVerificationCode(authInfo.getLogin());
 
-        DataHelper.VerificationCode verificationCode = new DataHelper.VerificationCode(codeFromDB);
+        verificationPage.shouldBeVisible();
+
+        String codeFromDB = SQLHelper.getVerificationCode(authInfo.getLogin());
+        var verificationCode = new DataHelper.VerificationCode(codeFromDB);
+
         verificationPage.verifyWithCode(verificationCode);
+
+        DashboardPage dashboard = new DashboardPage();
+        dashboard.shouldBeVisible();
     }
 
     @Test
@@ -37,11 +42,10 @@ public class LoginTest {
 
         for (int i = 0; i < 2; i++) {
             loginPage.invalidLogin(user);
-            loginPage.shouldShowWrongPasswordError();
+            loginPage.shouldShowError(LoginPage.error);
         }
 
         loginPage.invalidLogin(user);
-        loginPage.shouldShowBlockedUserError();
+        loginPage.shouldShowError(LoginPage.blocked);
     }
-
 }
