@@ -22,8 +22,10 @@ public class LoginTest {
     void shouldLoginWithVerificationCode() {
         DataHelper.AuthInfo authInfo = DataHelper.getValidUser();
         LoginPage loginPage = open("http://localhost:9999", LoginPage.class);
+
         VerificationPage verificationPage = loginPage.validLogin(authInfo);
         String codeFromDB = SQLHelper.getVerificationCode(authInfo.getLogin());
+
         DataHelper.VerificationCode verificationCode = new DataHelper.VerificationCode(codeFromDB);
         verificationPage.verifyWithCode(verificationCode);
     }
