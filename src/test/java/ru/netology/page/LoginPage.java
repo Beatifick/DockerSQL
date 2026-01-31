@@ -23,6 +23,12 @@ public class LoginPage {
                 .shouldHave(text("Ошибка! Пользователь заблокирован"));
     }
 
+    public void shouldShowWrongPasswordError() {
+        $("[data-test-id='error-notification']")
+                .shouldBe(visible)
+                .shouldHave(text("Неверно указан логин или пароль"));
+    }
+
     private void enterCredentials(DataHelper.AuthInfo authInfo) {
         loginField.clear();
         loginField.setValue(authInfo.getLogin());

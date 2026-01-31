@@ -10,10 +10,11 @@ import java.sql.SQLException;
 public class SQLHelper {
 
     private static final String URL = "jdbc:mysql://localhost:3306/appdb";
-    private static final String USER = "appuser";
+    private static final String USER = "app";
     private static final String PASS = "apppass";
 
-    private SQLHelper() {}
+    private SQLHelper() {
+    }
 
     public static String getVerificationCode(String login) {
         var query = "SELECT code FROM auth_codes ac " +
