@@ -6,6 +6,7 @@ import org.junit.jupiter.api.TestInstance;
 import ru.netology.data.DataHelper;
 import ru.netology.data.SQLHelper;
 import ru.netology.page.LoginPage;
+import ru.netology.page.VerificationPage;
 
 import static com.codeborne.selenide.Selenide.open;
 
@@ -18,13 +19,13 @@ public class LoginTest {
     }
 
     @Test
-    void shouldGoToVerificationPageAfterLogin() {
-        var authInfo = DataHelper.getValidUser();
-        var loginPage = open("http://localhost:9999", LoginPage.class);
-
-        var verificationPage = loginPage.validLogin(authInfo);
-
-        verificationPage.shouldBeVisible();
+    void shouldLoginWithVerificationCode() {
+        DataHelper.AuthInfo authInfo = DataHelper.getValidUser();
+        LoginPage loginPage = open("http://localhost:9999", LoginPage.class);
+        VerificationPage verificationPage = loginPage.validLogin(authInfo);
+        String codeFromDB = SQLHelper.getVerificationCode(authInfo.getLogin());
+        DataHelper.VerificationCode verificationCode = new DataHelper.VerificationCode(codeFromDB);
+        verificationPage.verifyWithCode(verificationCode);
     }
 
     @Test
